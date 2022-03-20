@@ -1,0 +1,60 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# This workflow integrates Scan with GitHub's code scanning feature
+# Scan is a free open-source security tool for modern DevOps teams from ShiftLeft
+# Visit https://slscan.io/en/latest/integrations/code-scan for help
+name: SL Scan
+
+on:
+  push:
+    branches: 
+      - master
+      - renovate/**
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ master ]
+  schedule:
+    - cron: '25 9 * * 0'
+
+permissions:
+  contents: read
+
+jobs:
+  Scan-Build:
+    # Scan runs on ubuntu, mac and windows
+    permissions:
+      contents: read # for actions/checkout to fetch code
+      pull-requests: write # for ShiftLeftSecurity/scan-action to add comments in pull request
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+    runs-on: ubuntu-latest
+    steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@56008243b5bcc21d227601d398064599c69eb33c
+      with:
+        egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
+
+    - uses: actions/checkout@2d1c1198e79c30cca5c3957b1e3b65ce95b5356e
+    # Instructions
+    # 1. Setup JDK, Node.js, Python etc depending on your project type
+    # 2. Compile or build the project before invoking scan
+    #    Example: mvn compile, or npm install or pip install goes here
+    # 3. Invoke Scan with the github token. Leave the workspace empty to use relative url
+
+    - name: Perform Scan
+      uses: ShiftLeftSecurity/scan-action@39af9e54bc599c8077e710291d790175c9231f64
+      env:
+        WORKSPACE: ""
+        SCAN_AUTO_BUILD: true
+      with:
+        output: reports
+        # Scan auto-detects the languages in your project. To override uncomment the below variable and set the type
+        # type: credscan,java
+        # type: python
+
+    - name: Upload report
+      uses: github/codeql-action/upload-sarif@3886398541fa820f40f9623033569588e6aaf8ed
+      with:
+        sarif_file: reports
