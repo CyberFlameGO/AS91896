@@ -1,16 +1,30 @@
-# This is a sample Python script.
+import os
+from typing import Union
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
+
+# (explain why it's not ordered correct)
+import pygame  # noqa: E402 isort: skip
+
+DISPLAY_WIDTH: int = 500
+DISPLAY_HEIGHT: int = 500
+WHITE: tuple[int, int, int] = (255, 255, 255)
+BLACK: tuple[int, int, int] = (0, 0, 0)
+DEEP_RED: tuple[int, int, int] = (255, 0, 0)
+
+pygame.init()
+clock = pygame.time.Clock()
+
+display_surface: Union[pygame.Surface, pygame.SurfaceType] = pygame.display.set_mode(
+    (DISPLAY_WIDTH, DISPLAY_HEIGHT)
+)
+
+def main():
+    pass
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    main()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
