@@ -1,9 +1,10 @@
 import os
 from typing import Union
+import sqlite3
 
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 
-# (explain why it's not ordered correct)
+# The environment variable needs to be set before importing pygame
 import pygame  # noqa: E402 isort: skip
 
 DISPLAY_WIDTH: int = 500
@@ -19,12 +20,10 @@ display_surface: Union[pygame.Surface, pygame.SurfaceType] = pygame.display.set_
     (DISPLAY_WIDTH, DISPLAY_HEIGHT)
 )
 
+
 def main():
     pass
 
 
-
-
 if __name__ == '__main__':
     main()
-
