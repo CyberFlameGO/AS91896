@@ -1,5 +1,6 @@
+import asyncio
 import os
-from typing import Union
+from typing import Sequence, Union
 import sqlite3
 
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
@@ -16,13 +17,73 @@ DEEP_RED: tuple[int, int, int] = (255, 0, 0)
 pygame.init()
 clock = pygame.time.Clock()
 
+velocity: int = 5
+jumps: int = 10
+jumping: bool = False
+run: bool = True
+left: bool = False
+right: bool = False
+
 display_surface: Union[pygame.Surface, pygame.SurfaceType] = pygame.display.set_mode(
     (DISPLAY_WIDTH, DISPLAY_HEIGHT)
 )
 
 
+class Player(object):
+    """
+    Player class oh yeah
+    """
+
+    def __init__(self, x, y, width, height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.velocity = 5
+        self.jumps: int = 10
+        self.jumping: bool = False
+        self.left: bool = False
+        self.right: bool = False
+        self.walk_count: int = 0
+        self.bounding_box = None
+
+
+def draw_window(window):
+    window.blit(BLACK, (0,0))
+
+
 def main():
-    pass
+    """
+    Main runner function
+    """
+    player = Player(300, 410, 64, 64)
+    pygame.display.set_caption("Jumpy Blob")
+    playing: bool = True
+    while playing:
+        clock.tick(27)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                playing = False
+            if event.type == pygame.KEYDOWN:
+                pass
+        keys: Sequence[bool] = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            if player.x > player.velocity:
+                player.x -= player.velocity
+                player.left = True
+                player.right = False
+        elif keys[pygame.K_RIGHT]:
+            if player.x < DISPLAY_WIDTH - player.width - player.velocity:
+                player.x += player.velocity
+                player.left = False
+                player.right = True
+        else:
+            player.left, player.right = False, False
+        if not player.jumping:
+            if keys[pygame.K_SPACE]:
+                player.jumping = True
+                player.left, player.right = False, False
+                player.walk_count = 0
 
 
 if __name__ == '__main__':
