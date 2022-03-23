@@ -14,9 +14,11 @@ WHITE: tuple[int, int, int] = (255, 255, 255)
 BLACK: tuple[int, int, int] = (0, 0, 0)
 DEEP_RED: tuple[int, int, int] = (255, 0, 0)
 
+
 pygame.init()
 clock = pygame.time.Clock()
 
+display_size: tuple[int, int] = (DISPLAY_WIDTH, DISPLAY_HEIGHT)
 display_surface: Union[pygame.Surface, pygame.SurfaceType] = pygame.display.set_mode(
     (DISPLAY_WIDTH, DISPLAY_HEIGHT)
 )
@@ -26,12 +28,14 @@ class Player(object):
     """
     Player class oh yeah
     """
+
     # TODO: add display width/height as params here
-    def __init__(self, x, y, width, height):
+    def __init__(self, display_size, width, height):
         self.width: int = width
         self.height: int = height
-        self.x = (DISPLAY_WIDTH - self.width) // 2
-        self.y = DISPLAY_HEIGHT - self.height
+        self.display_width, self.display_height = display_size
+        self.x = (self.display_width - self.width) // 2
+        self.y = (self.display_height - self.height) - 4
         self.velocity = 5
         self.bounding_box = None  # TODO: use this variable to detect if on platform
 
@@ -41,11 +45,7 @@ def main():
     Main runner function
     """
 
-    player = Player(DISPLAY_WIDTH, DISPLAY_HEIGHT - 65, 40, 60)
-    width: int = 40
-    height: int = 60
-    x = (DISPLAY_WIDTH - width) // 2
-    y = DISPLAY_HEIGHT - height
+    player = Player(40, 60)
     velocity = 5
     width: int = 40
     height: int = 60
@@ -61,20 +61,21 @@ def main():
 
         keys: Sequence[bool] = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
-            if x > velocity:
-                x -= velocity
+            if player.x > velocity:
+                player.x -= velocity
         if keys[pygame.K_RIGHT]:
-            if x < DISPLAY_WIDTH - width - velocity:
-                x += velocity
+            if player.x < DISPLAY_WIDTH - width - velocity:
+                player.x += velocity
         display_surface.fill(BLACK)
         red_rectangle = (
-            pygame.draw.rect(display_surface, DEEP_RED, (x, y, width, height))
+            pygame.draw.rect(display_surface, DEEP_RED, (player.x, player.y, player.width, player.height))
         )
         if (
                 red_rectangle  # remove this later when there's a proper use for the variable.
         ):
             pass
         pygame.display.update()
+
 
 if __name__ == '__main__':
     main()
