@@ -18,7 +18,7 @@ DEEP_RED: tuple[int, int, int] = (255, 0, 0)
 pygame.init()
 clock = pygame.time.Clock()
 
-display_size: tuple[int, int] = (DISPLAY_WIDTH, DISPLAY_HEIGHT)
+window_size: tuple[int, int] = (DISPLAY_WIDTH, DISPLAY_HEIGHT)
 display_surface: Union[pygame.Surface, pygame.SurfaceType] = pygame.display.set_mode(
     (DISPLAY_WIDTH, DISPLAY_HEIGHT)
 )
@@ -45,14 +45,14 @@ def main():
     Main runner function
     """
 
-    player = Player(40, 60)
+    player = Player(window_size, 40, 60)
     velocity = 5
     width: int = 40
     height: int = 60
     pygame.display.set_caption("Jumpy Blob")
     playing: bool = True
     while playing:
-        clock.tick(27)
+        clock.tick(30)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 playing = False
