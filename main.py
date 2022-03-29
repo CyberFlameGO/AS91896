@@ -167,10 +167,7 @@ def main():
                 # we tell the user it was a match
                 print("👏 MATCH!")
                 # puts the numbers back in the dictionary so it gets printed
-                # for some reason my IDE suggests i assert something?
-                assert isinstance(match1, str)
                 card_kv_store[numeric_pos1]: str = match1
-                assert isinstance(match2, str)
                 card_kv_store[numeric_pos2]: str = match2
             # otherwise if there's not a match, we tell the user both numbers then clear after 3 seconds
             else:
