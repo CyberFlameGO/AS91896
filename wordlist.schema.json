@@ -6,7 +6,7 @@
     "word": {
       "description": "A unique word",
       "type": "string",
-      "pattern": "/^[A-Za-z]+$/"
+      "pattern": "/\\A[[:alpha:]]+\\z/i"
     },
     "value": {
       "description": "A value of 1",
