@@ -3,4 +3,4 @@ Python Wordle thing
 """
 import utils
 
-print(utils(r'./wordlist.txt').load_words())
+print(utils.Utils(r'./wordlist.txt').load_words())
