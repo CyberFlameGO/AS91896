@@ -25,6 +25,24 @@ def clear_py_console(sec: float, lines: int):
     print("\n" * lines)  # sends a newline * specified amount (effectively clearing the console)
 
 
+def input_int_validator(input_text: str, invalid_message: str = "⚠ Invalid input! Please use a round number.") -> int:
+    """
+    Used to make sure an input is an integer
+    :rtype: int
+    :param invalid_message:
+    :param input_text:
+    :return:
+    """
+    while True:
+        try:
+            given_input: int = int(input(input_text).strip())
+        # catches errors for incorrect datatype
+        except ValueError:
+            print(invalid_message)  # tells the user they didn't type an integer
+        else:  # instead of having the return just be in the try statement, I've put it here
+            return given_input
+
+
 def game_board_print(dictionary: dict):
     """
     Prints the game board for the round; created to reduce duplicated code
@@ -89,9 +107,10 @@ def main():
         # turns the dict into a list
         card_list_values = list(card_kv_store.values())
         # shuffles said list
-        random.shuffle(card_list_values)
+        random.shuffle(card_list_values)  # CWE-338 doesn't apply here
         # turns all keys into asterisks
         card_kv_store = card_kv_store.fromkeys(card_kv_store, "*")
+
         # boolean variables for use in 'while' loops
         round_in_progress: bool = True
         error_catching: bool = True
@@ -108,16 +127,10 @@ def main():
                     # asks the user for a row (this is just part of the loop of asking for a plot, invalid input is
                     # caught later on
                     row1: str = input("Please choose a row: ").strip().lower()
-                    try:
-                        # asks the user for input as an integer (this seems redundant but it means i don't have a
-                        # valid_columns list at the top, and allows for easier 'if' statement code
-                        column1: int = int(input("Please choose a column: ").strip())
-                        error_catching = False  # if there are no errors raised we proceed to the next part of the code
-                    # catches errors for incorrect datatype
-                    except ValueError:
-                        print(
-                            "⚠ Invalid input! Please use a round number.")  # tells the user they didn't type an integer
+                    column1: int = input_int_validator("Please choose a column: ")  # asks the user for input as an int
                 error_catching: bool = True  # changes the variable to True because the code is recycled later on
+
+                # TODO: clean this whole area up; I can get rid of a lot of unnecessary code
 
                 # if the inputted rows and columns are valid
                 if row1 in VALID_ROWS and 1 <= column1 <= 4:
@@ -142,7 +155,7 @@ def main():
                         column2: int = int(input("Please choose your second selection's column: ").strip())
                         error_catching: bool = False
                     except ValueError:
-                        print("⚠ Invalid input! Please use a round number.")
+                        print("")
                 error_catching: bool = True
                 # same as before
                 if row2 in VALID_ROWS and 1 <= column2 <= 4:
@@ -186,6 +199,9 @@ def main():
                 wins += 1
                 # tells the user they completed the game
                 print("✨ Looks like you paired up all the numbers! ✨")
+
+                # TODO: add sqlite code here
+
                 # prints out completed board
                 game_board_print(card_kv_store)
                 # asks the user if they would like to keep playing
