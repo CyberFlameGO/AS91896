@@ -25,12 +25,16 @@ def clear_py_console(sec: float, lines: int):
     print("\n" * lines)  # sends a newline * specified amount (effectively clearing the console)
 
 
-def input_int_validator(input_text: str, invalid_message: str = "⚠ Invalid input! Please use a round number.") -> int:
+def input_int_validator(input_text: str, invalid_message: str = "⚠ Invalid input for column!\n"
+                                                                "Valid inputs: '1', '2', '3', '4'") -> int:
     """
-    Used to make sure an input is an integer
+    Used to make sure an input is an integer, as well as making sure it's valid input.
+    I'm aware the 1 <= given_input <= 4 makes the code not as reusable, unlike with the string validation,
+    but that's because string validation is easier and the functions only are used to validate the row and column
+    inputs.
     :rtype: int
-    :param invalid_message:
-    :param input_text:
+    :param invalid_message: str, error message given if check fails
+    :param input_text: str, message to ask
     :return:
     """
     while True:
@@ -40,12 +44,40 @@ def input_int_validator(input_text: str, invalid_message: str = "⚠ Invalid inp
         except ValueError:
             print(invalid_message)  # tells the user they didn't type an integer
         else:  # instead of having the return just be in the try statement, I've put it here
+            # if the input is valid
+            if 1 <= given_input <= 4:  # I know this looks like it ruins re-usability,
+                # but the function has a specific use case
+                return given_input
+            else:
+                print(invalid_message)
+
+
+def input_str_validator(input_text: str, valid_inputs: tuple, invalid_message: str = "⚠ Invalid input for row!\n"
+                                                                                     "Valid inputs: "
+                                                                                     "'a', 'b', 'c', 'd'") -> str:
+    """
+    Used to make sure an input is valid.
+    I know I'm feeding the function a tuple and not a list, and I *could've* used a list + list annotation which'd
+    make the code more re-usable, but again, the code is purpose-specific.
+    :rtype: str
+    :param valid_inputs: tuple, Valid inputs as a tuple to check against
+    :param input_text: str, message to ask
+    :param invalid_message: str, message to give on check failure
+    :return:
+    """
+    while True:
+        given_input: str = input(input_text).strip().lower()
+        # if the input is valid return it, otherwise loop !!!
+        if given_input in valid_inputs:
             return given_input
+        else:
+            print(invalid_message)
 
 
 def game_board_print(dictionary: dict):
     """
-    Prints the game board for the round; created to reduce duplicated code
+    Prints the game board for the round; created to reduce duplicated code (I could've done this as an f-string but
+    there's no point in it for right now)
     :param dictionary: dict
     """
     print("   ", 1, 2, 3, 4, "\n"
@@ -90,7 +122,8 @@ def main():
     # main while loop variable
     playing: bool = True
 
-    # prints board layout to introduce the user to the game
+    # prints board layout to introduce the user to the game (i could've messed around with having all my logic be
+    # done before I print this, but there's no benefit to it)
     print("Welcome to a game of Memory Game!\nThis is what the board looks like!\n\n"
           "   ", 1, 2, 3, 4, "\n"
                              "  \u2588 \u2588 \u2588 \u2588 \u2588 \u2588\n"
@@ -122,58 +155,42 @@ def main():
             game_board_print(card_kv_store)
             # when the user plots a point (chooses rows and columns)
             while plotting:
-                # catches errors (specifically catching integer ValueError)
-                while error_catching:
-                    # asks the user for a row (this is just part of the loop of asking for a plot, invalid input is
-                    # caught later on
-                    row1: str = input("Please choose a row: ").strip().lower()
-                    column1: int = input_int_validator("Please choose a column: ")  # asks the user for input as an int
-                error_catching: bool = True  # changes the variable to True because the code is recycled later on
+                # asks the user for a row (this is just part of the loop of asking for a plot, invalid input is
+                # caught later on
+                row1: str = input_str_validator("Please choose a row: ", VALID_ROWS)
+                column1: int = input_int_validator("Please choose a column: ")  # asks the user for input as an int
 
                 # TODO: clean this whole area up; I can get rid of a lot of unnecessary code
 
-                # if the inputted rows and columns are valid
-                if row1 in VALID_ROWS and 1 <= column1 <= 4:
-                    # adds the variables into one "word" (the colon after the var-name is for annotation, which was a
-                    # suggestion from my IDE)
-                    pos1: str = row1 + str(column1)
-                    numeric_pos1: int = PLOT_NUMBER_TRANSLATION.get(pos1)  # translates the plotted point into a number
-                    # gets the shuffled number which corresponds with the translated number (adds a 1 to account for the
-                    # list starting at 0)
-                    match1: str = card_list_values[numeric_pos1 - 1]
-                    plotting: bool = False  # plotted position was in correct bounds so we escape the loop
-                else:
-                    print("⚠ Invalid input, try again.")  # the user's input was out of bounds
-            plotting: bool = True  # beep boop, recycled variable
+                # adds the variables into one "word" (the colon after the var-name is for annotation, which was a
+                # suggestion from my IDE)
+                pos1: str = row1 + str(column1)
+                numeric_pos1: int = PLOT_NUMBER_TRANSLATION.get(pos1)  # translates the plotted point into a number
+                # gets the shuffled number which corresponds with the translated number (adds a 1 to account for the
+                # list starting at 0)
+                match1: str = card_list_values[numeric_pos1 - 1]
+                #     plotting: bool = False  # plotted position was in correct bounds so we escape the loop
+                # plotting: bool = True  # beep boop, recycled variable
 
-            while plotting:
-                while error_catching:
-                    # asks the user for row2, pretty much duplicated from the plot 1 code
-                    row2: str = input("Please choose your second selection's row: ").strip().lower()
-                    # error-catches again
-                    try:
-                        column2: int = int(input("Please choose your second selection's column: ").strip())
-                        error_catching: bool = False
-                    except ValueError:
-                        print("")
+                # while plotting:
+                # asks the user for row2, pretty much duplicated from the plot 1 code
+                row2: str = input_str_validator("Please choose your second selection's row: ", VALID_ROWS)
+                # error-catches again
+                column2: int = input_int_validator("Please choose your second selection's column: ")
                 error_catching: bool = True
-                # same as before
-                if row2 in VALID_ROWS and 1 <= column2 <= 4:
-                    # makes sure the input isn't identical to the first plot point, and if it is, notifies the user and
-                    # makes the user input a new value
-                    if row1 == row2 and column1 == column2:
-                        print("⚠ Identical inputs are not allowed.")
-                    # if not identical (aka else), continue along with the code (which is pretty much identical to
-                    # plot-point 1
-                    else:
-                        pos2: str = row2 + str(column2)
-                        numeric_pos2: int = PLOT_NUMBER_TRANSLATION.get(
-                            pos2)  # translates the plotted point into a number
-                        match2: str = card_list_values[numeric_pos2 - 1]
-                        plotting: bool = False  # plotted position was in correct bounds so we escape the loop
+                # makes sure the input isn't identical to the first plot point, and if it is, notifies the user and
+                # makes the user input a new value
+                if row1 == row2 and column1 == column2:
+                    print("⚠ Identical inputs are not allowed.")
+                # if not identical (aka else), continue along with the code (which is pretty much identical to
+                # plot-point 1
                 else:
-                    print("⚠ Invalid input, try again.")
-            plotting: bool = True  # beep boop, recycled variable
+                    pos2: str = row2 + str(column2)
+                    numeric_pos2: int = PLOT_NUMBER_TRANSLATION.get(
+                        pos2)  # translates the plotted point into a number
+                    match2: str = card_list_values[numeric_pos2 - 1]
+                    plotting: bool = False  # plotted position was in correct bounds so we escape the loop
+            # plotting: bool = True  # beep boop, recycled variable
 
             # if both of the inputs match
             if match1 == match2:
