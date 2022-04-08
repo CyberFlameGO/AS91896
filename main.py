@@ -1,9 +1,13 @@
 # coding=utf-8
-"""Matching game"""
+"""
+Matching game.
+I'm not using classes because python classes aren't great and in my opinion, for this use case functions are adequate.
+"""
 
 # imports for the project
 import random
 import time
+import sqlite3
 
 # dictionary to translate all possible plot-points to numbers
 PLOT_NUMBER_TRANSLATION: dict[str, int] = {
@@ -13,6 +17,9 @@ PLOT_NUMBER_TRANSLATION: dict[str, int] = {
 }
 # row letters which are valid in input
 VALID_ROWS: tuple[str, str, str, str] = ('a', 'b', 'c', 'd')
+
+conn = sqlite3.connect("highscores.db")
+
 
 
 def clear_py_console(sec: float, lines: int):
@@ -163,7 +170,7 @@ def main():
         # code for each round
         while round_in_progress:
             # keep getting IDE warnings; this just makes sure all the variables are firstly initialized (yes yes,
-            # i know python is dynamic), and secondly reset on each iteration
+            # i know python is dynamic), and secondly ensure reset on each iteration
             row1, row2, column1, column2 = "", "", 0, 0
             # prints out the current board from the function i made earlier
             game_board_print(card_kv_store)
@@ -172,8 +179,6 @@ def main():
             # caught later on
             row1: str = input_str_validator("Please choose a row: ", VALID_ROWS)
             column1: int = input_int_validator("Please choose a column: ")  # asks the user for input as an int
-
-            # TODO: clean this whole area up; I can get rid of a lot of unnecessary code
 
             # concatenation
             pos1: str = string_int_concatenator(row1, column1)
@@ -247,6 +252,7 @@ def main():
     # end of game
     print("Thanks for playing!")
     # raises the exit error, pretty much what sys.exit() does
+    conn.close()
     raise SystemExit
 
 
