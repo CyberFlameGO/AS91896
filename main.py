@@ -21,7 +21,6 @@ VALID_ROWS: tuple[str, str, str, str] = ('a', 'b', 'c', 'd')
 conn = sqlite3.connect("highscores.db")
 
 
-
 def clear_py_console(sec: float, lines: int):
     """
     Function to clear x amount of lines after a specified period of time (in seconds)
@@ -233,7 +232,7 @@ def main():
                 # tells the user they completed the game
                 print("✨ Looks like you paired up all the numbers! ✨")
 
-                # TODO: add sqlite code here
+                # TODO: add sqlite code here. I just need time elapsed, and when the attempt was in epoch time.
 
                 # prints out completed board
                 game_board_print(card_kv_store)
