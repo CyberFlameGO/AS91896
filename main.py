@@ -233,6 +233,9 @@ def main():
                 print("✨ Looks like you paired up all the numbers! ✨")
 
                 # TODO: add sqlite code here. I just need time elapsed, and when the attempt was in epoch time.
+                #  i also need to remember to only create a table if it doesn't exist, and see if there's an
+                #  internal id field in sqlite or if i need to make one myself (to see when someone's first attempt
+                #  was)
 
                 # prints out completed board
                 game_board_print(card_kv_store)
