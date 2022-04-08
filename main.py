@@ -58,7 +58,6 @@ def input_str_validator(input_text: str, valid_inputs: tuple,
     Used to make sure an input is valid.
     I know I'm feeding the function a tuple and not a list, and I *could've* used a list + list annotation which'd
     make the code more re-usable, but again, the code is purpose-specific.
-    :param bad_input: str, bad input
     :rtype: str
     :param valid_inputs: tuple, Valid inputs as a tuple to check against
     :param input_text: str, message to ask
@@ -72,6 +71,19 @@ def input_str_validator(input_text: str, valid_inputs: tuple,
             return given_input
         print(invalid_message)  # no point slapping this into an 'else' statement when it won't run if it returns
         # correctly
+
+
+def string_int_concatenator(string: str, integer: int) -> str:
+    """
+    A dead simple string and integer concatenator, without the overhead for unnecessary flexibility.
+    Doesn't value check because it's done earlier.
+    :return:
+    :rtype: str
+    :type string: str
+    :param string: str, string to concatenate the integer onto
+    :param integer: int, integer to turn into string and add to the string
+    """
+    return string + str(integer)
 
 
 def game_board_print(dictionary: dict):
@@ -109,6 +121,7 @@ def main():
     """
     Main function
     TODO: Change error checking to be in function
+    Game caveats: You can attempt to rematch an already-matched pair
     """
 
     # Dictionary which stores all the values to be used in the game
@@ -146,8 +159,6 @@ def main():
 
         # boolean variables for use in 'while' loops
         round_in_progress: bool = True
-        error_catching: bool = True
-        plotting: bool = True
 
         # code for each round
         while round_in_progress:
@@ -165,14 +176,12 @@ def main():
             # TODO: clean this whole area up; I can get rid of a lot of unnecessary code
 
             # concatenation
-            pos1: str = row1 + str(column1)
+            pos1: str = string_int_concatenator(row1, column1)
 
             numeric_pos1: int = PLOT_NUMBER_TRANSLATION.get(pos1)  # translates the plotted point into a number
             # gets the shuffled number which corresponds with the translated number (adds a 1 to account for the
             # list starting at 0)
             match1: str = card_list_values[numeric_pos1 - 1]
-            #     plotting: bool = False  # plotted position was in correct bounds so we escape the loop
-            # plotting: bool = True  # beep boop, recycled variable
 
             # asks the user for row2, pretty much duplicated from the plot 1 code
             duplicate_checking: bool = True
@@ -188,12 +197,10 @@ def main():
                     duplicate_checking: bool = False
                 # if not identical (aka else), continue along with the code (which is pretty much identical to
                 # plot-point 1
-            pos2: str = row2 + str(column2)
+            pos2: str = string_int_concatenator(row2, column2)
             numeric_pos2: int = PLOT_NUMBER_TRANSLATION.get(
                 pos2)  # translates the plotted point into a number
             match2: str = card_list_values[numeric_pos2 - 1]
-
-            # plotting: bool = True  # beep boop, recycled variable
 
             # if both of the inputs match
             if match1 != match2:
