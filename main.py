@@ -21,6 +21,17 @@ PLOT_NUMBER_TRANSLATION: dict[str, int] = {
 VALID_ROWS: tuple[str, str, str, str] = ('a', 'b', 'c', 'd')
 
 
+class Database:
+    """
+    Database holding
+    TODO: make sure the code works under this whole class setup
+    """
+
+    def __init__(self, db_name: str):
+        self.connection = sqlite3.connect(db_name)  # todo: put this and the create if not exists into a function
+        self.cursor = self.connection.cursor()
+
+
 def clear_py_console(sec: float, lines: int):
     """
     Function to clear x amount of lines after a specified period of time (in seconds)
@@ -130,6 +141,8 @@ def main():
     Game caveats: You can attempt to rematch an already-matched pair
     """
 
+    db = Database(r"highscores.db")
+
     # Dictionary which stores all the values to be used in the game
     card_kv_store: dict[int] = {
         1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 6,
@@ -140,8 +153,6 @@ def main():
     wins: int = 0
     # main while loop variable
     playing: bool = True
-
-    conn = sqlite3.connect("highscores.db")  # todo: put this and the create if not exists into a function
 
     # prints board layout to introduce the user to the game (i could've messed around with having all my logic be
     # done before I print this, but there's no benefit to it)
