@@ -8,6 +8,8 @@ I'm not using classes because python classes aren't great and in my opinion, for
 import random
 import time
 import sqlite3
+# this may be considered excessive precision but i don't mind
+from timeit import default_timer as timer
 
 # dictionary to translate all possible plot-points to numbers
 PLOT_NUMBER_TRANSLATION: dict[str, int] = {
@@ -17,8 +19,6 @@ PLOT_NUMBER_TRANSLATION: dict[str, int] = {
 }
 # row letters which are valid in input
 VALID_ROWS: tuple[str, str, str, str] = ('a', 'b', 'c', 'd')
-
-conn = sqlite3.connect("highscores.db")
 
 
 def clear_py_console(sec: float, lines: int):
@@ -141,6 +141,8 @@ def main():
     # main while loop variable
     playing: bool = True
 
+    conn = sqlite3.connect("highscores.db")
+
     # prints board layout to introduce the user to the game (i could've messed around with having all my logic be
     # done before I print this, but there's no benefit to it)
     print("Welcome to a game of Memory Game!\nThis is what the board looks like!\n\n"
@@ -162,11 +164,11 @@ def main():
         random.shuffle(card_list_values)  # CWE-338 doesn't apply here
         # turns all keys into asterisks
         card_kv_store = card_kv_store.fromkeys(card_kv_store, "*")
-
         # boolean variables for use in 'while' loops
         round_in_progress: bool = True
 
         # code for each round
+        start = timer()
         while round_in_progress:
             # keep getting IDE warnings; this just makes sure all the variables are firstly initialized (yes yes,
             # i know python is dynamic), and secondly ensure reset on each iteration
@@ -202,8 +204,7 @@ def main():
                 # if not identical (aka else), continue along with the code (which is pretty much identical to
                 # plot-point 1
             pos2: str = string_int_concatenator(row2, column2)
-            numeric_pos2: int = PLOT_NUMBER_TRANSLATION.get(
-                pos2)  # translates the plotted point into a number
+            numeric_pos2: int = PLOT_NUMBER_TRANSLATION.get(pos2)  # translates the plotted point into a number
             match2: str = card_list_values[numeric_pos2 - 1]
 
             # if both of the inputs match
@@ -214,7 +215,7 @@ def main():
                     f"is {match2} though!"
                     "\n\nWe'll be hiding these values in 3 seconds, so memorize up❗")
                 # this is calling the function i made at the top of the file
-                clear_py_console(3, 1000)
+                #clear_py_console(3, 1000)  todo: uncomment after test
 
             # otherwise if there's not a match, we tell the user both numbers then clear after 3 seconds
             else:
@@ -225,6 +226,8 @@ def main():
                 card_kv_store[numeric_pos2]: str = match2
             # checks if there are no * chars in the dict (which means the user has completed the game)
             if "*" not in card_kv_store.values():
+                # end the timer
+                end = timer()
                 # round is no longer in progress
                 round_in_progress: bool = False
                 # adds the win to the user
@@ -250,11 +253,13 @@ def main():
                 else:
                     print("Your wins this session:", wins)
                     # turns off while loop and doesn't go back to start of loop as it has ended
+                    print(end-start)  # todo: remove this test code after
                     playing: bool = False
     # end of game
     print("Thanks for playing!")
-    # raises the exit error, pretty much what sys.exit() does
+    # Close the sqlite3 connection
     conn.close()
+    # raises the exit error, pretty much what sys.exit() does
     raise SystemExit
 
 
