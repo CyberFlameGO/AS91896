@@ -141,7 +141,7 @@ def main():
     # main while loop variable
     playing: bool = True
 
-    conn = sqlite3.connect("highscores.db")
+    conn = sqlite3.connect("highscores.db")  # todo: put this and the create if not exists into a function
 
     # prints board layout to introduce the user to the game (i could've messed around with having all my logic be
     # done before I print this, but there's no benefit to it)
@@ -215,7 +215,7 @@ def main():
                     f"is {match2} though!"
                     "\n\nWe'll be hiding these values in 3 seconds, so memorize up❗")
                 # this is calling the function i made at the top of the file
-                #clear_py_console(3, 1000)  todo: uncomment after test
+                clear_py_console(3, 1000)
 
             # otherwise if there's not a match, we tell the user both numbers then clear after 3 seconds
             else:
@@ -238,7 +238,9 @@ def main():
                 # TODO: add sqlite code here. I just need time elapsed, and when the attempt was in epoch time.
                 #  i also need to remember to only create a table if it doesn't exist, and see if there's an
                 #  internal id field in sqlite or if i need to make one myself (to see when someone's first attempt
-                #  was)
+                #  was). i might wanna track in milliseconds (though sqlite's default is seconds), and to find the
+                #  time it took i'll just use end-start (and have the epoch logged be the one from the end, as in,
+                #  getting the epoch at the end of the round)
 
                 # prints out completed board
                 game_board_print(card_kv_store)
@@ -253,7 +255,6 @@ def main():
                 else:
                     print("Your wins this session:", wins)
                     # turns off while loop and doesn't go back to start of loop as it has ended
-                    print(end-start)  # todo: remove this test code after
                     playing: bool = False
     # end of game
     print("Thanks for playing!")
