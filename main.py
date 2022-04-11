@@ -2,6 +2,8 @@
 """
 Matching game.
 I'm not using classes because python classes aren't great and in my opinion, for this use case functions are adequate.
+
+This code is flexible and robust for its use case, however doesn't allow for having a larger grid.
 """
 
 # imports for the project
@@ -30,6 +32,20 @@ class Database:
     def __init__(self, db_name: str):
         self.connection = sqlite3.connect(db_name)  # todo: put this and the create if not exists into a function
         self.cursor = self.connection.cursor()
+        self.cursor.execute(
+            '''CREATE TABLE IF NOT EXISTS Highscores (
+            'ID' INTEGER PRIMARY KEY NOT NULL, 
+            'attempt_length' INT NOT NULL, 
+            'attempt_timestamp' DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL 
+            );
+        '''
+        )
+        self.cursor.execute("INSERT INTO Highscores (ID,attempt_length,attempt_timestamp) VALUES (1,1,1)")
+        self.connection.commit()
+        # create a db table if it doesn't exist
+
+    def insert_row(self, row):
+        pass
 
 
 def clear_py_console(sec: float, lines: int):
@@ -270,7 +286,7 @@ def main():
     # end of game
     print("Thanks for playing!")
     # Close the sqlite3 connection
-    conn.close()
+    db.connection.close()
     # raises the exit error, pretty much what sys.exit() does
     raise SystemExit
 
