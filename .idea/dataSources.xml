@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="SQLite - highscores.db" uuid="932ab94d-ca28-4c7f-af09-1808752c0de6">
+    <data-source source="LOCAL" name="SQLite - Highscores" uuid="7ac41bdf-6cac-4c65-9349-e52375ca980a">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:highscores.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <driver-properties>
-        <property name="date_class" value="INTEGER" />
         <property name="encoding" value="'UTF-8'" />
       </driver-properties>
     </data-source>

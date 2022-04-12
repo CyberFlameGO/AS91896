@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dataSource name="SQLite - highscores.db">
+<dataSource name="SQLite - Highscores">
   <database-model serializer="dbm" dbms="SQLITE" family-id="SQLITE" format-version="4.20">
     <root id="1">
       <ServerVersion>3.36.0</ServerVersion>
@@ -1284,33 +1284,41 @@
     </argument>
     <column id="473" parent="163" name="ID">
       <Position>1</Position>
-      <DataType>int|0s</DataType>
+      <DataType>INTEGER|0s</DataType>
+      <NotNull>1</NotNull>
     </column>
     <column id="474" parent="163" name="attempt_length">
       <Position>2</Position>
-      <DataType>int|0s</DataType>
+      <DataType>INT|0s</DataType>
+      <NotNull>1</NotNull>
     </column>
     <column id="475" parent="163" name="attempt_timestamp">
       <Position>3</Position>
-      <DataType>int|0s</DataType>
+      <DataType>DATETIME|0s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
     </column>
-    <column id="476" parent="164" name="type">
+    <key id="476" parent="163">
+      <ColNames>ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="477" parent="164" name="type">
       <Position>1</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="477" parent="164" name="name">
+    <column id="478" parent="164" name="name">
       <Position>2</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="478" parent="164" name="tbl_name">
+    <column id="479" parent="164" name="tbl_name">
       <Position>3</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="479" parent="164" name="rootpage">
+    <column id="480" parent="164" name="rootpage">
       <Position>4</Position>
       <DataType>int|0s</DataType>
     </column>
-    <column id="480" parent="164" name="sql">
+    <column id="481" parent="164" name="sql">
       <Position>5</Position>
       <DataType>text|0s</DataType>
     </column>

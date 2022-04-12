@@ -4,12 +4,17 @@ Matching game.
 I'm not using classes because python classes aren't great and in my opinion, for this use case functions are adequate.
 
 This code is flexible and robust for its use case, however doesn't allow for having a larger grid.
+
+For in future, I could set up a customizable database name and a reset option (with confirmation), but that's just
+extra bells and whistles, and if the user really wanted to do either of those things the code makes enough sense for
+simple modification by a person with relatively decent knowledge of Python.
 """
 
 # imports for the project
-import random
 import time
 import sqlite3
+
+from random import shuffle
 # this may be considered excessive precision but i don't mind
 from timeit import default_timer as timer
 
@@ -23,29 +28,38 @@ PLOT_NUMBER_TRANSLATION: dict[str, int] = {
 VALID_ROWS: tuple[str, str, str, str] = ('a', 'b', 'c', 'd')
 
 
-class Database:
+# Deriving from object (not necessary but looks better in my opinion)
+class Database(object):
     """
-    Database holding
-    TODO: make sure the code works under this whole class setup
+    Database class
     """
 
     def __init__(self, db_name: str):
-        self.connection = sqlite3.connect(db_name)  # todo: put this and the create if not exists into a function
+        """
+        Database initialization logic
+        :param db_name:
+        """
+        # Initialize the database (if it doesn't exist, a new file is created)
+        self.connection = sqlite3.connect(db_name)
+        # Set the cursor variable
         self.cursor = self.connection.cursor()
+        # create a db table if it doesn't exist
         self.cursor.execute(
             '''CREATE TABLE IF NOT EXISTS Highscores (
             'ID' INTEGER PRIMARY KEY NOT NULL, 
-            'attempt_length' INT NOT NULL, 
+            'attempt_length' REAL DEFAULT 0.0 NOT NULL, 
             'attempt_timestamp' DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL 
             );
         '''
         )
-        self.cursor.execute("INSERT INTO Highscores (ID,attempt_length,attempt_timestamp) VALUES (1,1,1)")
-        self.connection.commit()
-        # create a db table if it doesn't exist
 
-    def insert_row(self, row):
-        pass
+    def insert_row(self, length: float):
+        """
+        Inserts a new row for an attempt
+        :param length:
+        """
+        self.cursor.execute(f"INSERT INTO Highscores (attempt_length) VALUES ({length})")
+        self.connection.commit()
 
 
 def clear_py_console(sec: float, lines: int):
@@ -153,10 +167,10 @@ def game_board_print(dictionary: dict):
 def main():
     """
     Main function
-    TODO: Change error checking to be in function
+
     Game caveats: You can attempt to rematch an already-matched pair
     """
-
+    # Call an instance of the database class
     db = Database(r"highscores.db")
 
     # Dictionary which stores all the values to be used in the game
@@ -188,7 +202,7 @@ def main():
         # turns the dict into a list
         card_list_values = list(card_kv_store.values())
         # shuffles said list
-        random.shuffle(card_list_values)  # CWE-338 doesn't apply here
+        shuffle(card_list_values)  # CWE-338 doesn't apply here
         # turns all keys into asterisks
         card_kv_store = card_kv_store.fromkeys(card_kv_store, "*")
         # boolean variables for use in 'while' loops
@@ -255,6 +269,7 @@ def main():
             if "*" not in card_kv_store.values():
                 # end the timer
                 end = timer()
+                time_taken: float = end - start
                 # round is no longer in progress
                 round_in_progress: bool = False
                 # adds the win to the user
@@ -262,12 +277,8 @@ def main():
                 # tells the user they completed the game
                 print("✨ Looks like you paired up all the numbers! ✨")
 
-                # TODO: add sqlite code here. I just need time elapsed, and when the attempt was in epoch time.
-                #  i also need to remember to only create a table if it doesn't exist, and see if there's an
-                #  internal id field in sqlite or if i need to make one myself (to see when someone's first attempt
-                #  was). i might wanna track in milliseconds (though sqlite's default is seconds), and to find the
-                #  time it took i'll just use end-start (and have the epoch logged be the one from the end, as in,
-                #  getting the epoch at the end of the round)
+                # Insert a new row for this attempt with the time taken
+                db.insert_row(time_taken)
 
                 # prints out completed board
                 game_board_print(card_kv_store)
