@@ -286,7 +286,7 @@ def main():
                 round_end: str = input(
                     "Well done! Game completed, would you like to play another round?\nType 'y' to play another round, "
                     "or anything else to finish this session.\nInput: ").lower().strip()
-                # if yes print next round incoming and go to the top of the code (repeat the while loop
+                # if yes print next round incoming and go to the top of the code (repeat the while loop), it doesn't scan for valid input because attempts are stored in the db so progress isn't lost on game end. TODO: switch to match-case for graphing
                 if round_end == "y":
                     print("Alright! Next round incoming. . .")
                 # else finish the game
