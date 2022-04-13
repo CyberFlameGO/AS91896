@@ -1288,46 +1288,56 @@
     <table id="474" parent="163" name="sqlite_master">
       <System>1</System>
     </table>
-    <column id="475" parent="473" name="ID">
+    <table id="475" parent="163" name="sqlite_sequence">
+      <System>1</System>
+    </table>
+    <column id="476" parent="473" name="ID">
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <Position>1</Position>
+      <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="476" parent="473" name="attempt_length">
+    <column id="477" parent="473" name="attempt_length">
       <DataType>REAL|0s</DataType>
       <DefaultExpression>0.0</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="477" parent="473" name="attempt_timestamp">
+    <column id="478" parent="473" name="attempt_timestamp">
       <DataType>DATETIME|0s</DataType>
       <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <key id="478" parent="473">
+    <key id="479" parent="473">
       <ColNames>ID</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="479" parent="474" name="type">
+    <column id="480" parent="474" name="type">
       <DataType>text|0s</DataType>
       <Position>1</Position>
     </column>
-    <column id="480" parent="474" name="name">
+    <column id="481" parent="474" name="name">
       <DataType>text|0s</DataType>
       <Position>2</Position>
     </column>
-    <column id="481" parent="474" name="tbl_name">
+    <column id="482" parent="474" name="tbl_name">
       <DataType>text|0s</DataType>
       <Position>3</Position>
     </column>
-    <column id="482" parent="474" name="rootpage">
+    <column id="483" parent="474" name="rootpage">
       <DataType>int|0s</DataType>
       <Position>4</Position>
     </column>
-    <column id="483" parent="474" name="sql">
+    <column id="484" parent="474" name="sql">
       <DataType>text|0s</DataType>
       <Position>5</Position>
+    </column>
+    <column id="485" parent="475" name="name">
+      <Position>1</Position>
+    </column>
+    <column id="486" parent="475" name="seq">
+      <Position>2</Position>
     </column>
   </database-model>
 </dataSource>

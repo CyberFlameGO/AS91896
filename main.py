@@ -64,10 +64,14 @@ class Database(object):
         self.connection = sqlite3.connect(db_name)
         # Set the cursor variable
         self.cursor = self.connection.cursor()
-        # create a db table if it doesn't exist
+        # create a db table if it doesn't exist.
+        # I'm aware that the autoincrement is redundant, as with having an 'id' column at all as
+        # there's a built-in rowid which the id column just aliases to (unless using 'WITHOUT ROWID', which i'm not
+        # doing right now as it's not worth the effort), but I've set it up this way on purpose.
+        # Switching to no rowid is something I may do if I ever come back to working on this after submitting it.
         self.cursor.execute(
             '''CREATE TABLE IF NOT EXISTS Highscores (
-            'ID' INTEGER PRIMARY KEY NOT NULL, 
+            'ID' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
             'attempt_length' REAL DEFAULT 0.0 NOT NULL, 
             'attempt_timestamp' DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL 
             );
@@ -125,9 +129,10 @@ def input_int_validator(input_text: str, invalid_message: str = "⚠ Invalid inp
     :param input_text: str, message to ask
     :return:
     """
+    # we don't need to use a variable here because once the function returns, no more function code is executed
     while True:
         try:
-            given_input: int = int(input(input_text).strip())
+            given_input: int = int(input(input_text).strip())  # scans for input
         # catches errors for incorrect datatype
         except ValueError:
             print(invalid_message)  # tells the user they didn't type an integer
@@ -153,8 +158,9 @@ def input_str_validator(input_text: str, valid_inputs: tuple,
         :param invalid_message: str, message to give on check failure
         :return:
         """
+    # we don't need to use a variable here because once the function returns, no more function code is executed
     while True:
-        given_input: str = input(input_text).strip().lower()
+        given_input: str = input(input_text).strip().lower()  # scans for input
         # if the input is valid return it, otherwise loop !!!
         if given_input in valid_inputs:
             return given_input
@@ -232,7 +238,7 @@ def main():
                     "played (if you've played before)\nType 'memory' to play a round, or 'graph' to "
                     "view a graph: ").lower().strip():
             case "memory":
-                print("pog")
+                print("Sounds good, let's play!")
                 choosing_option = False
             case "graph":
                 print("Showing you your graph...")
@@ -308,7 +314,7 @@ def main():
             numeric_pos2: int = PLOT_NUMBER_TRANSLATION.get(pos2)  # translates the plotted point into a number
             match2: str = card_list_values[numeric_pos2 - 1]
 
-            # if both of the inputs match
+            # if both the inputs match
             if match1 != match2:
                 print(
                     f"{pos2.title()} does not match {pos1.title()} unfortunately.\n{pos1.title()} is {match1} and "
@@ -342,7 +348,7 @@ def main():
 
                 # prints out completed board
                 game_board_print(card_kv_store)
-                # asks the user if they would like to keep playing
+                # asks the user if they would like to keep playing and listens for input
                 round_end: str = input(
                     "Well done! Game completed, would you like to play another round?\nType 'y' to play another round, "
                     "or anything else to finish this session.\nInput: ").lower().strip()
