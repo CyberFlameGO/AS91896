@@ -23,7 +23,10 @@ Timestamps are stored for this reason,
 and if I'm not mistaken they're stored in ISO-8601
 (if I update the game after submitting it, I may change that to millisecond-precision integer/epoch time)
 
-Lastly for this docstring, I'm
+This is a huge docstring as I'm aware, so lastly, I do want to acknowledge that I have GitHub Copilot and JetBrains'
+Full Line Code Completion installed, and if I recall correctly I only used GitHub Copilot once,
+for completing two lines in my graph_attempts() function, and for JetBrains' Full Line Code Completion,
+I don't think I used what it suggested, but I'm declaring it anyway.
 """
 
 # imports for the project
@@ -90,7 +93,7 @@ def graph_attempts(attempts: pd.DataFrame):
     # set the x-axis to be the attempt length
     plt.plot(attempts["attempt_length"])
     # set the y-axis to be the attempt length
-    plt.ylabel("Attempt Length")
+    plt.ylabel("Attempt Length (time taken in seconds)")
     # set the x-axis to be the attempt length
     plt.xlabel("Attempt Number")
     # show the plot
@@ -241,7 +244,7 @@ def main():
 
     # prints board layout to introduce the user to the game (i could've messed around with having all my logic be
     # done before I print this, but there's no benefit to it)
-    print("Welcome to a game of Memory Game!\nThis is what the board looks like!\n\n"
+    print("Welcome to a round of Memory Game!\nThis is what the board looks like!\n\n"
           "   ", 1, 2, 3, 4, "\n"
                              "  \u2588 \u2588 \u2588 \u2588 \u2588 \u2588\n"
                              "A \u2588 * * * * \u2588 A\n"
@@ -249,8 +252,10 @@ def main():
                              "C \u2588 * * * * \u2588 C\n"
                              "D \u2588 * * * * \u2588 D\n"
                              "  \u2588 \u2588 \u2588 \u2588 \u2588 \u2588\n   ", 1, 2, 3, 4,
-          "\nYou choose a position by its line (row) number and column letter, kinda like in Chess! I hope you "
-          "enjoy!\n\n")
+          "\nYou choose a position by its row (line) letter and column number, kinda like in Chess! There are two of "
+          "each 'card', and your goal is to find the 8 pairs in the quickest time possible. If you don't find a pair "
+          "in your two selections, the game tells you the two cards' values, but memorise quickly as the screen "
+          "spams blank lines shortly after displaying those values! I hope you enjoy :)\n\n")
 
     # loop for the game
     while playing:
