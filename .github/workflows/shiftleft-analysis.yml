@@ -44,7 +44,7 @@ jobs:
     # 3. Invoke Scan with the github token. Leave the workspace empty to use relative url
 
     - name: Perform Scan
-      uses: ShiftLeftSecurity/scan-action@39af9e54bc599c8077e710291d790175c9231f64
+      uses: ShiftLeftSecurity/scan-action@4d4c04908eff87430482f36340ad5706c14cf9a6
       env:
         WORKSPACE: ""
         SCAN_AUTO_BUILD: true
