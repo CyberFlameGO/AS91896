@@ -258,9 +258,9 @@ def main():
                              "C \u2588 * * * * \u2588 C\n"
                              "D \u2588 * * * * \u2588 D\n"
                              "  \u2588 \u2588 \u2588 \u2588 \u2588 \u2588\n   ", 1, 2, 3, 4,
-          "\nYou choose a position by its row (line) letter and column number, kinda like in Chess! There are two of "
-          "each 'card', and your goal is to find the 8 pairs in the quickest time possible. If you don't find a pair "
-          "in your two selections, the game tells you the two cards' values, but memorise quickly as the screen "
+          "\nYou choose a position by its row (line) letter and column number, kinda like in Chess!\nThere are two of "
+          "each 'card', and your goal is to find the 8 pairs in the quickest time possible.\nIf you don't find a pair "
+          "in your two selections, the game tells you the two cards' values, \nbut memorise quickly as the screen "
           "spams blank lines shortly after displaying those values! I hope you enjoy :)\n\n")
 
     # loop for the game
