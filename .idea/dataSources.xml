@@ -11,5 +11,12 @@
         <property name="encoding" value="'UTF-8'" />
       </driver-properties>
     </data-source>
+    <data-source source="LOCAL" name="highscores" uuid="b846c9fe-9004-4d24-b7e5-cb5c346d4419">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/highscores.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

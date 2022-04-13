@@ -1,21 +1,39 @@
+#!/usr/bin/env python3.10
 # coding=utf-8
 """
 Matching game.
-I'm not using classes because python classes aren't great and in my opinion, for this use case functions are adequate.
+I'm not using many classes because python classes aren't great, and in my opinion, for this use case, functions are
+adequate.
+I am using a database class though
 
-This code is flexible and robust for its use case, however doesn't allow for having a larger grid.
+This code is flexible and robust for its use case, however, doesn't allow for having a larger grid.
 
-For in future, I could set up a customizable database name and a reset option (with confirmation), but that's just
-extra bells and whistles, and if the user really wanted to do either of those things the code makes enough sense for
+I'd like to acknowledge that I only use pandas for the dataframe, but firstly, it's easier to pull data into
+matplotlib using pandas instead of having to set up my own logic,
+and secondly, it makes the program easier to expand on in future (I could've set up the graph using pandas too using
+.plot on the dataframe directly, but this was easier to understand).
+
+For in the future, I could set up a customizable database name and a reset option (with confirmation), but that's just
+extra bells and whistles, and if the user really wanted to do either of those things, the code makes enough sense for
 simple modification by a person with relatively decent knowledge of Python.
+
+Another thing I could do to expand the game is to allow the user to graph not only by attempt/id, but also by
+timestamp.
+Timestamps are stored for this reason,
+and if I'm not mistaken they're stored in ISO-8601
+(if I update the game after submitting it, I may change that to millisecond-precision integer/epoch time)
+
+Lastly for this docstring, I'm
 """
 
 # imports for the project
-import time
 import sqlite3
+import time
 
+from matplotlib import pyplot as plt
+import pandas as pd
 from random import shuffle
-# this may be considered excessive precision but i don't mind
+# this may be considered excessive precision, but I don't mind
 from timeit import default_timer as timer
 
 # dictionary to translate all possible plot-points to numbers
@@ -28,7 +46,7 @@ PLOT_NUMBER_TRANSLATION: dict[str, int] = {
 VALID_ROWS: tuple[str, str, str, str] = ('a', 'b', 'c', 'd')
 
 
-# Deriving from object (not necessary but looks better in my opinion)
+# Deriving from object (not necessary but looks better, in my opinion)
 class Database(object):
     """
     Database class
@@ -62,9 +80,29 @@ class Database(object):
         self.connection.commit()
 
 
+def graph_attempts(attempts: pd.DataFrame):
+    """
+    Function to graph the attempts
+    :param attempts: pd.DataFrame
+    """
+    # set the plot size
+    plt.figure(figsize = (10, 8))
+    # set the x-axis to be the attempt length
+    plt.plot(attempts["attempt_length"])
+    # set the y-axis to be the attempt length
+    plt.ylabel("Attempt Length")
+    # set the x-axis to be the attempt length
+    plt.xlabel("Attempt Number")
+    # show the plot
+    plt.show()
+    print("A window showing you the graph should've appeared. You'll be taken back to the menu in 5 seconds, "
+          "but the graph should stay open until you close it yourself!")
+    time.sleep(5)
+
+
 def clear_py_console(sec: float, lines: int):
     """
-    Function to clear x amount of lines after a specified period of time (in seconds)
+    Function to clear x number of lines after a specified period of time (in seconds)
     :param sec: float
     :param lines: int
     """
@@ -75,7 +113,7 @@ def clear_py_console(sec: float, lines: int):
 def input_int_validator(input_text: str, invalid_message: str = "⚠ Invalid input for column!\n"
                                                                 "Valid inputs: '1', '2', '3', '4'") -> int:
     """
-    Used to make sure an input is an integer, as well as making sure it's valid input.
+    Used to make sure an input is an integer, as well as making sure it's a valid input.
     I'm aware the 1 <= given_input <= 4 makes the code not as reusable, unlike with the string validation,
     but that's because string validation is easier and the functions only are used to validate the row and column
     inputs.
@@ -101,16 +139,17 @@ def input_int_validator(input_text: str, invalid_message: str = "⚠ Invalid inp
 
 def input_str_validator(input_text: str, valid_inputs: tuple,
                         invalid_message: str = "⚠ Invalid input for row!\nValid inputs: 'a', 'b', 'c', 'd'") -> str:
+    # noinspection SpellCheckingInspection
     """
-    Used to make sure an input is valid.
-    I know I'm feeding the function a tuple and not a list, and I *could've* used a list + list annotation which'd
-    make the code more re-usable, but again, the code is purpose-specific.
-    :rtype: str
-    :param valid_inputs: tuple, Valid inputs as a tuple to check against
-    :param input_text: str, message to ask
-    :param invalid_message: str, message to give on check failure
-    :return:
-    """
+        Used to make sure an input is valid.
+        I know I'm feeding the function a tuple and not a list, and I *could've* used a list + list annotation which'd
+        make the code more re-usable, but again, the code is purpose-specific.
+        :rtype: str
+        :param valid_inputs: tuple, Valid inputs as a tuple to check against
+        :param input_text: str, message to ask
+        :param invalid_message: str, message to give on check failure
+        :return:
+        """
     while True:
         given_input: str = input(input_text).strip().lower()
         # if the input is valid return it, otherwise loop !!!
@@ -181,8 +220,24 @@ def main():
 
     # win counter (starting at 0)
     wins: int = 0
-    # main while loop variable
+    # while loop variables
     playing: bool = True
+    choosing_option: bool = True
+    while choosing_option:
+        # Python 3.10 has nifty new switch-case statements (instead of using switch they call it match though)
+        match input("Would you like to play a game of Memory, or view your scores as a graph from when you last "
+                    "played (if you've played before)\nType 'memory' to play a round, or 'graph' to "
+                    "view a graph: ").lower().strip():
+            case "memory":
+                print("pog")
+                choosing_option = False
+            case "graph":
+                print("Showing you your graph...")
+                df: pd.DataFrame = pd.read_sql_query("SELECT * from Highscores", db.connection)
+                graph_attempts(df)
+
+            case _:
+                print("Invalid or mistyped input, try again.\n")
 
     # prints board layout to introduce the user to the game (i could've messed around with having all my logic be
     # done before I print this, but there's no benefit to it)
@@ -258,7 +313,7 @@ def main():
                 # this is calling the function i made at the top of the file
                 clear_py_console(3, 1000)
 
-            # otherwise if there's not a match, we tell the user both numbers then clear after 3 seconds
+            # otherwise, if there's not a match, we tell the user both numbers then clear after 3 seconds
             else:
                 # we tell the user it was a match
                 print("👏 MATCH!")
@@ -286,7 +341,9 @@ def main():
                 round_end: str = input(
                     "Well done! Game completed, would you like to play another round?\nType 'y' to play another round, "
                     "or anything else to finish this session.\nInput: ").lower().strip()
-                # if yes print next round incoming and go to the top of the code (repeat the while loop), it doesn't scan for valid input because attempts are stored in the db so progress isn't lost on game end. TODO: switch to match-case for graphing
+                # if yes print next round incoming and go to the top of the code (repeat the while loop), it doesn't
+                # scan for valid input,
+                # because attempts are stored in the db so progress isn't lost on game end.
                 if round_end == "y":
                     print("Alright! Next round incoming. . .")
                 # else finish the game
