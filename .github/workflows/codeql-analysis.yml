@@ -48,7 +48,7 @@ jobs:
         egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
 
     - name: Checkout repository
-      uses: actions/checkout@0ffe6f9c5599e73776da5b7f113e994bc0a76ede
+      uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
