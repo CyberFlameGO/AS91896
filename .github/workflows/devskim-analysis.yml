@@ -33,7 +33,7 @@ jobs:
           egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
 
       - name: Checkout code
-        uses: actions/checkout@e6d535c99c374d0c3f6d8cd8086a57b43c6c700a
+        uses: actions/checkout@6a84743051be17cee477b0a26bd866b5dba996e4
 
       - name: Run DevSkim scanner
         uses: microsoft/DevSkim-Action@ad580575f2d8a534df4b177051e79253c64f8441

@@ -36,7 +36,7 @@ jobs:
       with:
         egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
 
-    - uses: actions/checkout@e6d535c99c374d0c3f6d8cd8086a57b43c6c700a
+    - uses: actions/checkout@6a84743051be17cee477b0a26bd866b5dba996e4
     # Instructions
     # 1. Setup JDK, Node.js, Python etc depending on your project type
     # 2. Compile or build the project before invoking scan
