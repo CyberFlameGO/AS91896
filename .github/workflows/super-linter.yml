@@ -32,7 +32,7 @@ jobs:
           fetch-depth: 0
 
       - name: Lint Code Base
-        uses: github/super-linter@c839c0b828957c8a754d9653ec7dc526672248f3
+        uses: github/super-linter@37b6ff9a3fe5e104bb33af6d200d7c20d77b5e47
         env:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: master
